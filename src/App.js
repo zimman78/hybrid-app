@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import pokemon from './pokemonStore';
+import { StyleSheet, View } from 'react-native';
+import { Router, Switch, Route } from './routing';
+import Home from './Home';
+import Pokemon from './Pokemon';
 
 class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <FlatList
-          keyExtractor={pokemon => pokemon.number}
-          data={pokemon}
-          renderItem={ ({ item }) => <Text>{item.name}</Text>}
-        />
+        <Router>
+          <Switch>
+            <Route exact path="/" render={props => <Home {...props} />} />
+            <Route path="/pokemon" render={props => <Pokemon {...props} />} />
+          </Switch>
+        </Router>
       </View>
     );
   }
@@ -19,7 +22,6 @@ class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 50,
