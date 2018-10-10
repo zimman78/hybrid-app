@@ -1,28 +1,53 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
-import pokemon from './pokemonStore';
+import { View, Text, Image, Platform, Button, Share } from 'react-native';
+import { Link } from './routing';
 
 const Pokemon = props => {
-	const examplePokemon = pokemon[0];
+	const { selectedPokemon } = props;
+	const handlePress = () => {
+		Share.share({
+			message: "Check out my favorite pokemon",
+			url: props.selectedPokemon.photoUrl
+		});
+	};
+	const backButton = (
+		<View>
+			<Link to="/">
+				<Text>Go Back</Text>
+			</Link>
+		</View>
+	);
+	if (!props.selectedPokemon) {
+		return (
+			<View>
+				{backButton}
+				<Text>No Pokemon selected</Text>
+			</View>
+		);
+	}
 	return (
 		<View>
+			{backButton}
 			<View>
-				<View>
-					<Text>{`#${examplePokemon.number}`}</Text>
-				</View>
-				<View>
-					<Text>{`Name: ${examplePokemon.name}`}</Text>
-				</View>
-				<View>
-					<Text>{`Type: ${examplePokemon.type}`}</Text>
-				</View>
-				<View>
-					<Image
-						style={{ width: 50, height: 50 }}
-						source={{ uri: examplePokemon.photoUrl }}
-					/>
-				</View>
+				<Text>{`#${selectedPokemon.number}`}</Text>
 			</View>
+			<View>
+				<Text>{`Name: ${selectedPokemon.name}`}</Text>
+			</View>
+			<View>
+				<Text>{`Type: ${selectedPokemon.type}`}</Text>
+			</View>
+			<View>
+				<Image
+					style={{ width: 50, height: 50 }}
+					source={{ uri: selectedPokemon.photoUrl }}
+				/>
+			</View>
+			{Platform.OS !== 'web' && (
+				<View>
+					<Button title="Share" onPress={handlePress} />
+				</View>
+			)}
 		</View>
 	);
 };
